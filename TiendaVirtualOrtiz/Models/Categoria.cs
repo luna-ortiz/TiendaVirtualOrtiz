@@ -11,6 +11,7 @@ namespace TiendaVirtualOrtiz.Models
         public string Nombre { get; set; }
 
         [Range(0, 1000000)]
+        //luna
         public string Descripcion { get; set; }
 
         [Range(0, 1)]
