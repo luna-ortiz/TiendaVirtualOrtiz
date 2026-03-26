@@ -15,6 +15,7 @@ namespace TiendaVirtualOrtiz.Controllers
             _context = context;
         }
 
+        //lista de produtos
         public IActionResult Index()
         {
             var productos = _context.Productos
@@ -22,6 +23,52 @@ namespace TiendaVirtualOrtiz.Controllers
                 .ToList();
 
             return View(productos);
+        }
+
+        //formulario crear
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        //guardar producto
+        [HttpPost]
+        public IActionResult Create(Producto producto)
+        {
+            _context.Productos.Add(producto);
+            _context.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
+
+        //formulario editar
+        public IActionResult Edit(int id)
+        {
+            var producto = _context.Productos.Find(id);
+            ViewBag.Categorias = _context.Categorias.ToList();
+
+            return View(producto);
+        }
+
+        //Actualizar producto
+        [HttpPost]
+        public IActionResult Edit(Producto producto)
+        {
+            _context.Productos.Update(producto);
+            _context.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
+
+        //Eliminar producto
+        public IActionResult Delete(int id)
+        {
+            var producto = _context.Productos.Find(id);
+          
+            _context.Productos.Remove(producto);
+            _context.SaveChanges();
+
+            return RedirectToAction("Index");
         }
     }
 }
