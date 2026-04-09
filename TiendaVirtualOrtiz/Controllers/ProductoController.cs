@@ -28,6 +28,7 @@ namespace TiendaVirtualOrtiz.Controllers
         //formulario crear
         public IActionResult Create()
         {
+            ViewBag.Categorias = _context.Categorias.ToList();
             return View();
         }
 

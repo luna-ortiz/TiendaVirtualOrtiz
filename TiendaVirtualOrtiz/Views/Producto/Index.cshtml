@@ -1,11 +1,11 @@
 ﻿@model List<TiendaVirtualOrtiz.Models.Producto>
 
-<h2>Lista de Productos</h2>
+<h2 class="mb-3">Lista de Productos</h2>
 
-<a class="btn btn-primary" href="/Producto/Create">Nuevo Producto</a>
+<a class="btn btn-success mb-3" href="/Producto/Create">+ Nuevo Producto</a>
 
-<table class="table">
-    <thead>
+<table class="table table-striped table-bordered">
+    <thead class="table-dark"> 
         <tr>
             <th>Nombre</th>
             <th>Precio</th>
@@ -25,9 +25,11 @@
                 <td>@item.Categoria?.Nombre</td>
 
                 <td>
-                    <a href="/Producto/Edit/@item.Id">Editar</a>
+                    <a class="btn btn-warning btn-sm"
+                       href="/Producto/Edit/@item.Id">Editar</a>
 
-                    <a href="/Producto/Delete/@item.Id">Eliminar</a>
+                    <a class="btn btn-danger btn-sm"
+                       href="/Producto/Delete/@item.Id">Eliminar</a>
                 </td>
             </tr>
         }
