@@ -17,6 +17,11 @@ namespace TiendaVirtualOrtiz.Controllers
 
         public IActionResult Index()
         {
+            if (HttpContext.Session.GetString("Usuario") == null)
+            {
+                return RedirectToAction("Index", "Login");
+            }
+
             var usuarios = _context.Usuarios.ToList();
 
             return View(usuarios);

@@ -18,6 +18,10 @@ namespace TiendaVirtualOrtiz.Controllers
         //lista de produtos
         public IActionResult Index()
         {
+            if (HttpContext.Session.GetString("Usuario")== null) //validar que no ingrese sin usuario (redirecciona a login)
+            {
+                return RedirectToAction("Index", "Login");
+            }
             var productos = _context.Productos
                 .Include(p => p.Categoria)
                 .ToList();
