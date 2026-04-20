@@ -22,6 +22,7 @@ namespace TiendaVirtualOrtiz.Controllers
             {
                 return RedirectToAction("Index", "Login");
             }
+
             var productos = _context.Productos
                 .Include(p => p.Categoria)
                 .ToList();
@@ -32,6 +33,11 @@ namespace TiendaVirtualOrtiz.Controllers
         //formulario crear
         public IActionResult Create()
         {
+            if (HttpContext.Session.GetString("Usuario") == null) //validar que no ingrese sin usuario (redirecciona a login)
+            {
+                return RedirectToAction("Index", "Login");
+            }
+
             ViewBag.Categorias = _context.Categorias.ToList();
             return View();
         }
@@ -40,6 +46,11 @@ namespace TiendaVirtualOrtiz.Controllers
         [HttpPost]
         public IActionResult Create(Producto producto)
         {
+            if (HttpContext.Session.GetString("Usuario") == null) //validar que no ingrese sin usuario (redirecciona a login)
+            {
+                return RedirectToAction("Index", "Login");
+            }
+
             _context.Productos.Add(producto);
             _context.SaveChanges();
 
@@ -49,6 +60,11 @@ namespace TiendaVirtualOrtiz.Controllers
         //formulario editar
         public IActionResult Edit(int id)
         {
+            if (HttpContext.Session.GetString("Usuario") == null) //validar que no ingrese sin usuario (redirecciona a login)
+            {
+                return RedirectToAction("Index", "Login");
+            }
+
             var producto = _context.Productos.Find(id);
             ViewBag.Categorias = _context.Categorias.ToList();
 
@@ -59,6 +75,11 @@ namespace TiendaVirtualOrtiz.Controllers
         [HttpPost]
         public IActionResult Edit(Producto producto)
         {
+            if (HttpContext.Session.GetString("Usuario") == null) //validar que no ingrese sin usuario (redirecciona a login)
+            {
+                return RedirectToAction("Index", "Login");
+            }
+
             _context.Productos.Update(producto);
             _context.SaveChanges();
 
@@ -68,6 +89,11 @@ namespace TiendaVirtualOrtiz.Controllers
         //Eliminar producto
         public IActionResult Delete(int id)
         {
+            if (HttpContext.Session.GetString("Usuario") == null) //validar que no ingrese sin usuario (redirecciona a login)
+            {
+                return RedirectToAction("Index", "Login");
+            }
+
             var producto = _context.Productos.Find(id);
           
             _context.Productos.Remove(producto);

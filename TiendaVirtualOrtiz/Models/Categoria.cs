@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using TiendaVirtualOrtiz.Models;
 
 namespace TiendaVirtualOrtiz.Models
 {
@@ -10,11 +11,12 @@ namespace TiendaVirtualOrtiz.Models
         [StringLength(100)]
         public string Nombre { get; set; }
 
-        [Range(0, 1000000)]
-        //luna
+        [Required]
+        [StringLength(1000)]
         public string Descripcion { get; set; }
 
-        [Range(0, 1)]
+        
+        [StringLength(100)]
         public string Estado { get; set; }
     }
 }
