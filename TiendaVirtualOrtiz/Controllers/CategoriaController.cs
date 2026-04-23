@@ -90,6 +90,12 @@ namespace TiendaVirtualOrtiz.Controllers
                 return RedirectToAction("Index", "Login");
             }
 
+            var rol = HttpContext.Session.GetString("Rol");//Solo admin puede eliminar
+            if (rol != "admin")
+            {
+                return RedirectToAction("Index");
+            }
+
             var categoria = _context.Categorias.Find(id);
 
             _context.Categorias.Remove(categoria);

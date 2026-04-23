@@ -28,8 +28,12 @@
                     <a class="btn btn-warning btn-sm"
                        href="/Usuario/Edit/@user.Id">Editar</a>
 
-                    <a class="btn btn-danger btn-sm"
-                       href="/Usuario/Delete/@user.Id">Eliminar</a>
+                    @if (Context.Session.GetString("Rol") == "admin") //si es admin
+                    {
+                        <a class="btn btn-danger btn-sm"
+                           href="/Usuario/Delete/@user.Id">Eliminar</a>
+
+                    }
                 </td>
             </tr>
         }

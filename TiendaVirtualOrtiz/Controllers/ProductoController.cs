@@ -94,6 +94,11 @@ namespace TiendaVirtualOrtiz.Controllers
                 return RedirectToAction("Index", "Login");
             }
 
+            var rol = HttpContext.Session.GetString("Rol");//Solo admin puede eliminar
+            if (rol != "admin") {
+                return RedirectToAction("Index");
+            }
+
             var producto = _context.Productos.Find(id);
           
             _context.Productos.Remove(producto);
