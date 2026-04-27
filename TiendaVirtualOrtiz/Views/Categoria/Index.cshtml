@@ -10,7 +10,10 @@
             <th>Nombre</th>
             <th>Descripcion</th>
             <th>Estado</th>
-            <th>Acciones</th>
+            @if (Context.Session.GetString("Rol") == "admin")//si es admin
+            {
+                <th>Acciones</th>
+            }
         </tr>
     </thead>
 

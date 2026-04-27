@@ -11,7 +11,11 @@
             <th>Precio</th>
             <th>Stock</th>
             <th>Categoría</th>
-            <th>Acciones</th>
+            @if (Context.Session.GetString("Rol") == "admin")//si es admin
+            {
+              <th>Acciones</th>
+            }
+            
         </tr>
     </thead>
 
@@ -23,18 +27,20 @@
                 <td>@item.Precio</td>
                 <td>@item.Stock</td>
                 <td>@item.Categoria?.Nombre</td>
+                    
 
-                <td>
-                    <a class="btn btn-warning btn-sm"
-                       href="/Producto/Edit/@item.Id">Editar</a>
+                @if (Context.Session.GetString("Rol")== "admin") //si es admin
+                {
+                    <td>
 
-                    @if (Context.Session.GetString("Rol")== "admin") //si es admin
-                    {
+                        <a class="btn btn-warning btn-sm"
+                           href="/Producto/Edit/@item.Id">Editar</a>
+
                         <a class="btn btn-danger btn-sm"
                            href="/Producto/Delete/@item.Id">Eliminar</a>
-
-                    }
-                </td>
+                    </td>
+                }
+                
             </tr>
         }
     </tbody>

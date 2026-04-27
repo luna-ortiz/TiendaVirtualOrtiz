@@ -2,6 +2,7 @@
 using System.Linq;
 using TiendaVirtualOrtiz.Models;
 using TiendaVirtualOrtiz.Data;
+using TiendaVirtualOrtiz.Helpers;
 
 namespace TiendaVirtualOrtiz.Controllers
 {
@@ -19,8 +20,10 @@ namespace TiendaVirtualOrtiz.Controllers
         [HttpPost]
         public IActionResult Index(string correo, string clave) //recibe correo y clave
         {
+            string claveHash = HashHelper.ObtenerHash(clave);
+
             var usuario = _context.Usuarios //conecta con bd a la tabla de usuarios
-                .FirstOrDefault(u => u.Correo == correo && u.Rol == clave); //envia y evalua con los datos de la tabla
+                .FirstOrDefault(u => u.Correo == correo && u.Clave == claveHash); //envia y evalua con los datos de la tabla
             if (usuario != null)
             {
                 HttpContext.Session.SetString("Usuario", usuario.Nombre);

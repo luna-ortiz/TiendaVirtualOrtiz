@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using TiendaVirtualOrtiz.Data;
 using TiendaVirtualOrtiz.Models;
+using TiendaVirtualOrtiz.Helpers;
 
 namespace TiendaVirtualOrtiz.Controllers
 {
@@ -46,6 +47,9 @@ namespace TiendaVirtualOrtiz.Controllers
             {
                 return RedirectToAction("Index", "Login");
             }
+
+            //Convertir contraseña a Hash
+            usuario.Clave = HashHelper.ObtenerHash(usuario.Clave);
 
             _context.Usuarios.Add(usuario);
             _context.SaveChanges();
