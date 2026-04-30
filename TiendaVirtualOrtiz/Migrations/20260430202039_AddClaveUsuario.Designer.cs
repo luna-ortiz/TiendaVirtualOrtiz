@@ -11,7 +11,7 @@ using TiendaVirtualOrtiz.Data;
 namespace TiendaVirtualOrtiz.Migrations
 {
     [DbContext(typeof(TiendaContext))]
-    [Migration("20260427224011_AddClaveUsuario")]
+    [Migration("20260430202039_AddClaveUsuario")]
     partial class AddClaveUsuario
     {
         /// <inheritdoc />

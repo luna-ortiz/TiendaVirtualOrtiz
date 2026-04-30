@@ -2,7 +2,10 @@
 
 <h2 class="mb-3">Lista de Categorias</h2>
 
-<a class="btn btn-success mb-3" href="/Categoria/Create">+ Nueva Categoria</a>
+@if (Context.Session.GetString("Rol") == "admin") //si es admin 
+{
+    <a class="btn btn-success mb-3" href="/Categoria/Create">+ Nueva Categoria</a>
+}
 
 <table class="table">
     <thead class="table-dark">
@@ -34,17 +37,16 @@
                     }
                 </td>
 
-                <td>
-                    <a class="btn btn-warning btn-sm"
-                       href="/Categoria/Edit/@cat.Id">Editar</a>
-
-                    @if (Context.Session.GetString("Rol") == "admin") //si es admin
-                    {
+                @if (Context.Session.GetString("Rol") == "admin") //si es admin
+                {
+                    <td>
+                        <a class="btn btn-warning btn-sm"
+                           href="/Categoria/Edit/@cat.Id">Editar</a>
+                    
                         <a class="btn btn-danger btn-sm"
                            href="/Categoria/Delete/@cat.Id">Eliminar</a>
-
-                    }
-                </td>
+                    </td>
+                }
 
             </tr>
         }

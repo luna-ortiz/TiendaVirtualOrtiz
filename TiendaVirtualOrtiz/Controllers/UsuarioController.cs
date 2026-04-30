@@ -48,13 +48,17 @@ namespace TiendaVirtualOrtiz.Controllers
                 return RedirectToAction("Index", "Login");
             }
 
-            //Convertir contraseña a Hash
-            usuario.Clave = HashHelper.ObtenerHash(usuario.Clave);
+            if (ModelState.IsValid) 
+            {
+                //Convertir contraseña a Hash
+                usuario.Clave = HashHelper.ObtenerHash(usuario.Clave);
+                _context.Usuarios.Add(usuario);
+                _context.SaveChanges();
 
-            _context.Usuarios.Add(usuario);
-            _context.SaveChanges();
+                return RedirectToAction("Index");
+            }
 
-            return RedirectToAction("Index");
+            return View(usuario);
         }
 
         //Formulario editar
