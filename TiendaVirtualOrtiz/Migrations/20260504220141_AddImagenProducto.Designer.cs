@@ -11,8 +11,8 @@ using TiendaVirtualOrtiz.Data;
 namespace TiendaVirtualOrtiz.Migrations
 {
     [DbContext(typeof(TiendaContext))]
-    [Migration("20260430202039_AddClaveUsuario")]
-    partial class AddClaveUsuario
+    [Migration("20260504220141_AddImagenProducto")]
+    partial class AddImagenProducto
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -62,6 +62,10 @@ namespace TiendaVirtualOrtiz.Migrations
 
                     b.Property<int>("CategoriaId")
                         .HasColumnType("int");
+
+                    b.Property<string>("ImagenUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nombre")
                         .IsRequired()

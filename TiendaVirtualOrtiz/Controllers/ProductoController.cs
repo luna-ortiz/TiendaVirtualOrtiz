@@ -15,10 +15,9 @@ namespace TiendaVirtualOrtiz.Controllers
             _context = context;
         }
 
-        //lista de produtos
         public IActionResult Index()
         {
-            if (HttpContext.Session.GetString("Usuario")== null) //validar que no ingrese sin usuario (redirecciona a login)
+            if (HttpContext.Session.GetString("Usuario") == null)
             {
                 return RedirectToAction("Index", "Login");
             }
@@ -30,10 +29,11 @@ namespace TiendaVirtualOrtiz.Controllers
             return View(productos);
         }
 
-        //formulario crear
+        //Guardar producto
+
         public IActionResult Create()
         {
-            if (HttpContext.Session.GetString("Usuario") == null) //validar que no ingrese sin usuario (redirecciona a login)
+            if (HttpContext.Session.GetString("Usuario") == null)
             {
                 return RedirectToAction("Index", "Login");
             }
@@ -42,13 +42,25 @@ namespace TiendaVirtualOrtiz.Controllers
             return View();
         }
 
-        //guardar producto
         [HttpPost]
-        public IActionResult Create(Producto producto)
+        public IActionResult Create(Producto producto, IFormFile imagen)
         {
-            if (HttpContext.Session.GetString("Usuario") == null) //validar que no ingrese sin usuario (redirecciona a login)
+            if (HttpContext.Session.GetString("Usuario") == null)
             {
                 return RedirectToAction("Index", "Login");
+            }
+
+            if (imagen != null)
+            {
+                var ruta = Path.Combine(Directory.GetCurrentDirectory(),
+                    "wwwroot/images", imagen.FileName);
+
+                using (var stream = new FileStream(ruta, FileMode.Create))
+                {
+                    imagen.CopyTo(stream);
+                }
+
+                producto.ImagenUrl = "/images/" + imagen.FileName;
             }
 
             _context.Productos.Add(producto);
@@ -57,10 +69,10 @@ namespace TiendaVirtualOrtiz.Controllers
             return RedirectToAction("Index");
         }
 
-        //formulario editar
+        //Formulario editar
         public IActionResult Edit(int id)
         {
-            if (HttpContext.Session.GetString("Usuario") == null) //validar que no ingrese sin usuario (redirecciona a login)
+            if (HttpContext.Session.GetString("Usuario") == null)
             {
                 return RedirectToAction("Index", "Login");
             }
@@ -71,11 +83,10 @@ namespace TiendaVirtualOrtiz.Controllers
             return View(producto);
         }
 
-        //Actualizar producto
         [HttpPost]
         public IActionResult Edit(Producto producto)
         {
-            if (HttpContext.Session.GetString("Usuario") == null) //validar que no ingrese sin usuario (redirecciona a login)
+            if (HttpContext.Session.GetString("Usuario") == null)
             {
                 return RedirectToAction("Index", "Login");
             }
@@ -89,22 +100,27 @@ namespace TiendaVirtualOrtiz.Controllers
         //Eliminar producto
         public IActionResult Delete(int id)
         {
-            if (HttpContext.Session.GetString("Usuario") == null) //validar que no ingrese sin usuario (redirecciona a login)
+            if (HttpContext.Session.GetString("Usuario") == null)
             {
                 return RedirectToAction("Index", "Login");
             }
 
-            var rol = HttpContext.Session.GetString("Rol");//Solo admin puede eliminar
-            if (rol != "admin") {
+            var rol = HttpContext.Session.GetString("Rol");
+
+            //SOLO ADMIN PUEDE ELIMINAR
+            if (rol != "Admin")
+            {
                 return RedirectToAction("Index");
             }
 
             var producto = _context.Productos.Find(id);
-          
+
             _context.Productos.Remove(producto);
             _context.SaveChanges();
 
             return RedirectToAction("Index");
         }
+
+
     }
 }

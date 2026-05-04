@@ -11,7 +11,11 @@
             <th>Correo</th>
             <th>Rol</th>
             <th>Celular</th>
-            <th>Acciones</th>
+            @if (Context.Session.GetString("Rol") == "admin") //si es admin
+            {
+                <th>Acciones</th>
+            }
+            
         </tr>
     </thead>
 
