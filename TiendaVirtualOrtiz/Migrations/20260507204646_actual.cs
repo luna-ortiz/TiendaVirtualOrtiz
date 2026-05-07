@@ -5,7 +5,7 @@
 namespace TiendaVirtualOrtiz.Migrations
 {
     /// <inheritdoc />
-    public partial class AddImagenProducto : Migration
+    public partial class actual : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

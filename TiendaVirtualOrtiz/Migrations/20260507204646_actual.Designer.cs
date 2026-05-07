@@ -11,8 +11,8 @@ using TiendaVirtualOrtiz.Data;
 namespace TiendaVirtualOrtiz.Migrations
 {
     [DbContext(typeof(TiendaContext))]
-    [Migration("20260504220141_AddImagenProducto")]
-    partial class AddImagenProducto
+    [Migration("20260507204646_actual")]
+    partial class actual
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -84,14 +84,35 @@ namespace TiendaVirtualOrtiz.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(Producto producto)
+        public IActionResult Edit(Producto producto, IFormFile imagen)
         {
-            if (HttpContext.Session.GetString("Usuario") == null)
+            var productoDB = _context.Productos.Find(producto.Id);
+            if (productoDB == null)
+
+                return NotFound();
+                //Actualizar datos normales
+            productoDB.Nombre = producto.Nombre;
+            productoDB.Precio = producto.Precio;
+            productoDB.Stock = producto.Stock;
+            productoDB.CategoriaId = producto.CategoriaId;
+
+            if(imagen != null)
             {
-                return RedirectToAction("Index", "Login");
+                var carpeta = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
+
+                if(!Directory.Exists(carpeta))
+                {
+                    Directory.CreateDirectory(carpeta);
+                }
+                var ruta = Path.Combine(carpeta, imagen.FileName);
+
+                using (var stream = new FileStream(ruta, FileMode.Create))
+                {
+                    imagen.CopyTo(stream);
+                }
+                productoDB.ImagenUrl = "/images/" + imagen.FileName;
             }
 
-            _context.Productos.Update(producto);
             _context.SaveChanges();
 
             return RedirectToAction("Index");
