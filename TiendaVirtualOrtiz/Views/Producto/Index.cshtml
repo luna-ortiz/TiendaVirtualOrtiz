@@ -1,11 +1,15 @@
 ﻿@model List<TiendaVirtualOrtiz.Models.Producto>
 
-<h2 class="mb-3">Lista de Productos</h2>
+<h2 class="mb-4 text-black center">Productos</h2>
 
 @if (Context.Session.GetString("Rol") == "admin")
 {
     <a class="btn btn-success mb-3" href="/Producto/Create">+ Nuevo Producto</a>
 }
+
+<a class="btn btn-primary mb-3" href="/Producto/Carrito">
+    Ver carrito
+</a>
 
 <div class="row">
     @foreach (var item in Model)
@@ -35,6 +39,19 @@
                         <a href="/Producto/Delete/@item.Id"
                            class="btn btn-danger btn-sm">Eliminar</a>
                     }
+
+                    <hr>
+                    <form asp-action="AgregarCarrito" method="post">
+
+                        <input type="hidden" name="id" value="@item.Id" />
+
+                        <input type="number" name="cantidad" value="1" min="1"
+                               class="form-control mb-2" />
+                        <button class="btn btn-primary w-100">
+                            Agregar al carrito
+                        </button>
+
+                    </form>
                 </div>
             </div>
         </div>
