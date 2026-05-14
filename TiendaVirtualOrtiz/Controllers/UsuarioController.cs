@@ -18,10 +18,7 @@ namespace TiendaVirtualOrtiz.Controllers
 
         public IActionResult Index()
         {
-            if (HttpContext.Session.GetString("Usuario") == null)
-            {
-                return RedirectToAction("Index", "Login");
-            }
+            
 
             var usuarios = _context.Usuarios.ToList();
 
@@ -32,10 +29,7 @@ namespace TiendaVirtualOrtiz.Controllers
 
         public IActionResult Create()
         {
-            if (HttpContext.Session.GetString("Usuario") == null)
-            {
-                return RedirectToAction("Index", "Login");
-            }
+            
 
             return View();
         }
@@ -43,10 +37,7 @@ namespace TiendaVirtualOrtiz.Controllers
         [HttpPost]
         public IActionResult Create(Usuario usuario)
         {
-            if (HttpContext.Session.GetString("Usuario") == null)
-            {
-                return RedirectToAction("Index", "Login");
-            }
+            
 
             if (ModelState.IsValid) 
             {
@@ -64,10 +55,7 @@ namespace TiendaVirtualOrtiz.Controllers
         //Formulario editar
         public IActionResult Edit(int id)
         {
-            if (HttpContext.Session.GetString("Usuario") == null)
-            {
-                return RedirectToAction("Index", "Login");
-            }
+            
 
             var usuario = _context.Usuarios.Find(id);
             ViewBag.Usuarios = _context.Usuarios.ToList();
@@ -80,10 +68,7 @@ namespace TiendaVirtualOrtiz.Controllers
         [HttpPost]
         public IActionResult Edit(Usuario usuario)
         {
-            if (HttpContext.Session.GetString("Usuario") == null)
-            {
-                return RedirectToAction("Index", "Login");
-            }
+            
 
             _context.Usuarios.Update(usuario);
             _context.SaveChanges();
@@ -94,10 +79,7 @@ namespace TiendaVirtualOrtiz.Controllers
         //Eliminar usuario
         public IActionResult Delete(int id)
         {
-            if (HttpContext.Session.GetString("Usuario") == null)
-            {
-                return RedirectToAction("Index", "Login");
-            }
+            
 
             var rol = HttpContext.Session.GetString("Rol");//Solo admin puede eliminar
             if (rol != "admin")

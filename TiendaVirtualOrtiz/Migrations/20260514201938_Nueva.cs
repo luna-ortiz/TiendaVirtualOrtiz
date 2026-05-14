@@ -5,7 +5,7 @@
 namespace TiendaVirtualOrtiz.Migrations
 {
     /// <inheritdoc />
-    public partial class actual : Migration
+    public partial class Nueva : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

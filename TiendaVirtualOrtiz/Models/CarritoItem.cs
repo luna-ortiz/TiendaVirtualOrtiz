@@ -3,6 +3,6 @@
     public class CarritoItem
     {
         public int ProductoId { get; set; }
-        public string Cantidad { get; set; }
+        public int Cantidad { get; set; }
     }
 }

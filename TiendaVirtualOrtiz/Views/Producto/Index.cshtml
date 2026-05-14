@@ -11,7 +11,20 @@
     Ver carrito
 </a>
 
-<div class="row">
+<div class="container mt-4">
+    @if (TempData["Mensaje"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Mensaje"]
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Error"]
+        </div>
+    }
+
     @foreach (var item in Model)
     {
         <div class="col-md-3 mb-4">
@@ -41,17 +54,33 @@
                     }
 
                     <hr>
-                    <form asp-action="AgregarCarrito" method="post">
+                    @if (item.Stock > 0)
+                    {
+                        <form asp-action="AgregarCarrito" method="post">
+                            <input type="hidden" name="id" value="@item.Id" />
+                            <input type="number" 
+                                   name="cantidad" 
+                                   value="1" 
+                                   min="1"
+                                   max="@item.Stock"
+                                   class="form-control mb-2" />
+                            <button class="btn btn-primary w-100">
+                                Agregar al carrito
+                            </button>
 
-                        <input type="hidden" name="id" value="@item.Id" />
+                        </form>
 
-                        <input type="number" name="cantidad" value="1" min="1"
-                               class="form-control mb-2" />
-                        <button class="btn btn-primary w-100">
-                            Agregar al carrito
+                    }
+                    else
+                    {
+                        <div class="alert alert-warning text-center">
+                            Producto agotado
+                        </div>
+                        <button class="btn btn-primary w-100" disabled> 
+                            Sin stock
                         </button>
+                    }            
 
-                    </form>
                 </div>
             </div>
         </div>

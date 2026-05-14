@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Text.Json;
 using TiendaVirtualOrtiz.Data;
 using TiendaVirtualOrtiz.Models;
-using System.Text.Json;
 
 namespace TiendaVirtualOrtiz.Controllers
 {
@@ -87,31 +87,37 @@ namespace TiendaVirtualOrtiz.Controllers
         [HttpPost]
         public IActionResult Edit(Producto producto, IFormFile imagen)
         {
-            var productoDB = _context.Productos.Find(producto.Id);
-            if (productoDB == null)
+            if (HttpContext.Session.GetString("Usuario") == null)
+            {
+                return RedirectToAction("Index", "Login");
+            }
 
+            var productoBD = _context.Productos.Find(producto.Id);
+            if (productoBD == null)
                 return NotFound();
-                //Actualizar datos normales
-            productoDB.Nombre = producto.Nombre;
-            productoDB.Precio = producto.Precio;
-            productoDB.Stock = producto.Stock;
-            productoDB.CategoriaId = producto.CategoriaId;
+            //Actualizar datos normales
+            productoBD.Nombre = producto.Nombre;
+            productoBD.Precio = producto.Precio;
+            productoBD.Stock = producto.Stock;
+            productoBD.CategoriaId = producto.CategoriaId;
 
-            if(imagen != null)
+            //Si sube nueva imagne
+            if (imagen != null)
             {
                 var carpeta = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
 
-                if(!Directory.Exists(carpeta))
+                if (!Directory.Exists(carpeta))
                 {
                     Directory.CreateDirectory(carpeta);
                 }
+
                 var ruta = Path.Combine(carpeta, imagen.FileName);
 
                 using (var stream = new FileStream(ruta, FileMode.Create))
                 {
                     imagen.CopyTo(stream);
                 }
-                productoDB.ImagenUrl = "/images/" + imagen.FileName;
+                productoBD.ImagenUrl = "/images/" + imagen.FileName;
             }
 
             _context.SaveChanges();
@@ -143,24 +149,47 @@ namespace TiendaVirtualOrtiz.Controllers
             return RedirectToAction("Index");
         }
 
-        //agregar carrito
         public IActionResult AgregarCarrito(int id, int cantidad)
         {
+            var producto = _context.Productos.Find(id);
+            // Validar Stock
+            if (producto == null || producto.Stock == 0)
+            {
+                TempData["Error"] = "Producto sin existencias";
+                return RedirectToAction("Index");
+            }
+
+            // Validar cantidad
+            if (cantidad > producto.Stock)
+            {
+                TempData["Error"] = "No hay disponibles tantas unidades";
+                return RedirectToAction("Index");
+            }
+
             var carritoJson = HttpContext.Session.GetString("Carrito");
+
             List<CarritoItem> carrito;
+
             if (carritoJson == null)
             {
                 carrito = new List<CarritoItem>();
             }
             else
             {
-                carrito = JsonSerializer.Deserialize<List<CarritoItem>>(carritoJson);
+                carrito = System.Text.Json.JsonSerializer
+                    .Deserialize<List<CarritoItem>>(carritoJson);
             }
 
             var item = carrito.FirstOrDefault(p => p.ProductoId == id);
 
-            if (item == null)
+            if (item != null)
             {
+                if ((item.Cantidad + cantidad) > producto.Stock)
+                {
+                    TempData["Error"] = "No hay suficientes unidades disponibles";
+                    return RedirectToAction("Index");
+                }
+
                 item.Cantidad += cantidad;
             }
             else
@@ -171,11 +200,17 @@ namespace TiendaVirtualOrtiz.Controllers
                     Cantidad = cantidad
                 });
             }
-            HttpContext.Session.SetString("Carrito", JsonSerializer.Serialize(carrito));
+
+            HttpContext.Session.SetString(
+                "Carrito",
+                System.Text.Json.JsonSerializer.Serialize(carrito));
+
+            // Mensaje éxito
+            TempData["Mensaje"] = "Producto agregado al carrito";
+
             return RedirectToAction("Index");
         }
 
-        //ver lista de carrito
         public IActionResult Carrito()
         {
             var carritoJson = HttpContext.Session.GetString("Carrito");
@@ -194,7 +229,7 @@ namespace TiendaVirtualOrtiz.Controllers
 
                 if (producto != null)
                 {
-                    productos.Add((producto.item.Cantidad));
+                    productos.Add((producto, item.Cantidad));
                 }
             }
 
@@ -229,7 +264,6 @@ namespace TiendaVirtualOrtiz.Controllers
 
             return RedirectToAction("Index");
         }
-
 
     }
 }
